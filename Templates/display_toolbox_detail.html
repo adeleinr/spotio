@@ -1,0 +1,45 @@
+{% block css %}
+    <link rel="stylesheet" href="/media_rsc/css/toolbox_detail.css" type="text/css" media="screen,projection" />
+{% endblock %}
+<div id="toolBox">
+    <div id="toolBoxIntro" class="span-8">
+	    <div id-"title">
+	        <span class="toolBoxIntro">{{toolbox.toolbox_name}}</span>
+	        <br />
+	        by <a href="{{toolbox.user.absolute_public_url}}">{{toolbox.user.user.username}}</a>
+	    </div>
+		<div id="description">
+			<p>
+        This is the stuff I use daily to be productive.
+      </p>
+		</div>
+		<div id="pictures">
+    </div>
+
+	</div>
+	<div id="toolBoxContent" class="span-15 last">
+		{% for toolentry in toolbox.toolboxtoolrelations %}		    
+		<div class="span-10 last"id="toolboxTab" url="{{toolentry.tool.absolute_url}}">
+            <div id="main" class="span-10 last">
+	            <div id="toolNumber" class="span-2">
+	                {{forloop.counter}}
+	            </div>
+	            <div id="tools" class="span-7 last">
+	            	  {% if toolentry.tool.tool_semantic_id %}
+                     <h5>
+                        <a href="http://freebase.com/view{{toolentry.tool.tool_semantic_id}}">
+                            {{toolentry.tool.tool_name}}
+                        </a>
+                     </h5>
+                  {% else %}
+                     <h5>{{toolentry.tool.tool_name|urlizetrunc:50}}</h5>
+                  {% endif %}
+					        <p>{{toolentry.note}}</p>
+	            </div>
+            </div>  
+	  </div>
+		{% endfor %}
+    </div>
+</div>
+ 
+   

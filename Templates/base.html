@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+    <title>{% block title %}{% endblock %}</title>
+    <!--<link rel="stylesheet" href="/media_rsc/js/jquery/css/redmond/jquery-ui-1.8.4.custom.css" type="text/css" /> -->
+    <link rel="stylesheet" href="/media_rsc/css/blueprint-css/blueprint/screen.css" type="text/css" media="screen, projection" />  
+    <link rel="stylesheet" href="/media_rsc/css/blueprint-css/blueprint/print.css" type="text/css" media="print" />
+    <!--[if IE]><link rel="stylesheet" href="/media_rsc/css/blueprint-css/blueprint/ie.css" type="text/css" media="screen, projection" /><![endif] --> 
+    <link rel="stylesheet" href="/media_rsc/css/global.lib.css" type="text/css" media="screen,projection" />
+    <link rel="stylesheet" href="/media_rsc/css/main.css?" type="text/css" media="screen,projection" />
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300,700&amp;v2' rel='stylesheet'
+    type='text/css'>
+    {% block css %}
+    {% endblock %}
+</head>
+
+<body>
+   <div class="container">
+      <!-- Start header -->
+      <div id="top-banner" class="span-24 last">
+          <div id="left-menu" class="span-7">   
+            <a href="/bfunweb">Logo</a>       
+          </div>
+          <div id="right-menu" class=" span-15 last">        
+            <ul class="clearfix">
+            	<li><a href="/bfunweb/adventures/">Explore</a></li>
+            	<li><a href="/bfunweb/create_adventure/">Post Adventure</a></li>
+              <li><a href="/bfunweb/people/">@People</a></li>
+              {% if request.user.username %}
+              <!--<li><a href="/bfunweb/user_toolbox_list/" >My Adventures</a></li>
+						  <li><a href="/bfunweb/user_detail/{{request.user.username}}">Me</a></li>-->
+						    {% if request.facebook.uid %}
+							      <li><a href="#" onclick="javascript:FB.logout(function(response){ document.location = '/bfunweb/logout_user' })">Logout</a></li>
+	              {% else %}
+							      <li><a href="/bfunweb/logout_user/">Logout</a></li>
+						    {% endif %}
+						  {% else %}
+						  
+						  <li><a href="/bfunweb/signup_user/">Join</a></li>
+              <li><a href="/bfunweb/login_user/" >Login</a></li>
+						  {% endif %}
+              
+            </ul>
+          </div>
+      </div>
+      <!-- End header -->
+      {% block content %}
+      {% endblock %}       
+      
+      <!-- Begin Footer -->
+      <div id="footer" class="span-24 last">
+      	<ul>
+      		<li><a href="/bfunweb/about">About</a></li>
+				  <li><a href="">Feedback</a></li>
+				  <li><a href="">Contact</a></li>
+      	</ul>
+      </div>
+      <!-- End Footer -->
+      </div>
+
+
+      </div>
+  </div>
+
+  {% load facebook_tags %}
+  {% facebook_js %} 
+	<!-- Google Analytics -->
+	<!-- end of Google Analytics -->
+  {% block js %}
+	{% endblock %}
+
+</body>
+
+</html>

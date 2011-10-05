@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+    <title>Welcome</title>
+    <link rel="stylesheet" href="/media_rsc/js/jquery/css/redmond/jquery-ui-1.8.4.custom.css" type="text/css" /> 
+    <link rel="stylesheet" href="/media_rsc/css/blueprint-css/blueprint/screen.css" type="text/css" media="screen, projection" />  
+    <link rel="stylesheet" href="/media_rsc/css/blueprint-css/blueprint/print.css" type="text/css" media="print" />
+    <!--[if IE]><link rel="stylesheet" href="/media_rsc/css/blueprint-css/blueprint/ie.css" type="text/css" media="screen, projection" /><![endif] --> 
+    <link rel="stylesheet" href="/media_rsc/css/global.lib.css" type="text/css" media="screen,projection" />
+    <link rel="stylesheet" href="/media_rsc/css/splash.css" type="text/css" media="screen,projection" />
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300,700&amp;v2' rel='stylesheet'
+    type='text/css'>
+</head>
+
+<body>
+  <div id="top-banner-splash">
+      <div id="left-menu-splash" span="class-19">          
+      </div>
+      <div id="right-menu-splash" span="class-3 last">
+          <ul class="clearfix">
+            	<li><a href="/bfunweb/adventures/">Explore</a></li>
+            	<li><a href="/bfunweb/create_adventure/">Post Adventure</a></li>
+              <li><a href="/bfunweb/people/">@People</a></li>
+              {% if request.user.username %}
+              <!--<li><a href="/bfunweb/user_toolbox_list/" >My Adventures</a></li>
+						  <li><a href="/bfunweb/user_detail/{{request.user.username}}">Me</a></li>-->
+						    {% if request.facebook.uid %}
+							      <li><a href="#" onclick="javascript:FB.logout(function(response){ document.location = '/bfunweb/logout_user' })">Logout</a></li>
+	              {% else %}
+							      <li><a href="/bfunweb/logout_user/">Logout</a></li>
+						    {% endif %}
+						  {% else %}
+						  
+						  <li><a href="/bfunweb/signup_user/">Join</a></li>
+              <li><a href="/bfunweb/login_user/" >Login</a></li>
+						  {% endif %}
+              
+            </ul>
+      </div>
+    </div>
+  </div>
+  <div class="container">
+    <div class="span-24 last">
+      <div id="left-content" class="span-14">
+        <p>Discover places you can afford. Have fun on a <span id="blue-emphasis">budget</span>. Share your weekend adventure's cost. How much did others spend? From an icecream treat to a weekend in Africa.</p>
+
+         <div class="ui-widget span-12 last">
+            <form id="search-form" method="post" action="/bfunweb/search/">
+                <div id="question" class="span-11 last">How much do you want to spend?</div>
+                <div id="search-box" class="span-11 last">
+                  $<input type="text" name="q" id="id_search_term" maxlength="10" size="5" placeholder="100.00"/>
+                  <input type="text" name="f" id="id_search_city" maxlength="30" size="12" placeholder="San Jose, CA"/>
+                  <input type="hidden" name="toolbox_id" id="id_toolbox_id" >
+                  <input type="submit" value="Search"/>
+					      </div>
+            </form>
+         </div>
+        
+      </div>
+      <div id="right-content" class="span-9 last">
+        <h2>Best Weekend Adventures</h2>
+        <div class="span-2"><img src="/media_rsc/images//beach_chair.png"/></div>
+        <div class="span-2 last"><img src="/media_rsc/images//flippers.png"/></div>
+
+        <div class="span-2"><img src="/media_rsc/images//cocktail.png"/></div>
+        <div class="span-2 last"><img src="/media_rsc/images/umbrella.png"/></div>
+
+        <h2>Free Adventures</h2>
+        <div class="span-2"><img src="/media_rsc/images/flip_flops.png"/></div>
+        <div class="span-2 last"><img src="/media_rsc/images/surfboard.png"/></div>
+
+        <div class="span-2"><img src="/media_rsc/images//cocktail.png"/></div>
+        <div class="span-2 last"><img src="/media_rsc/images//umbrella.png"/></div>
+        
+      </div>
+    </div>
+    <!-- Begin Footer -->
+    <div id="footer" class="span-24 last">
+    	<ul>
+    		<li><a href="/bfunweb/about">About</a></li>
+				<li><a href="">Feedback</a></li>
+				<li><a href="">Contact</a></li>
+    	</ul>
+    </div>
+    <!-- End Footer -->
+
+  </div>  
+
+  {% load facebook_tags %}
+  {% facebook_js %} 
+
+</body>
+
+</html>

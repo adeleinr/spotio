@@ -1,0 +1,78 @@
+#box-top{ 
+  margin-bottom:10px;
+}
+
+#adventures-search-box{
+  font-size:28px !important; 
+}
+
+#adventures-search-button{
+ margin-top:7px;
+}
+
+#adventures{
+  margin-right:50px;
+  padding:10px 10px 10px 10px;
+  cursor:pointer;
+}
+
+#adventures ul{
+  list-style: none !important;
+  padding: 0;
+  width:860px;
+}
+
+#adventures li{ 
+  float: left;
+  width: 23em;
+  padding-top:10px;
+  padding-bottom:10px;
+}
+
+.adventure{
+  background: #FFFFFF;
+  -moz-border-radius: 5px 5px 5px 5px;
+	-webkit-border-radius: 5px 5px 5px 5px;
+	-webkit-box-shadow:#555555 0 1px 8px -1px;
+	-moz-box-shadow:#555555 0 2px 8px -1px;
+	padding: 0px 0px 20px 0px;
+	width: 290px;
+	height: 120px;
+	font-size:18px !important;
+  
+
+}
+
+.adventure-title{
+  font-size:16px !important;
+  color:  #0755A5;
+}
+
+#adventure-picture{
+  padding-left:0px;
+  padding-top:0px;
+  background:#ffffff;
+  -moz-border-radius: 5px 5px 0px 0px;
+	-webkit-border-radius: 5px 5px 0px 0px;
+	height: 110px;
+}
+#adventure-picture img{
+  margin:10px;
+  border:1px black solid;
+}
+
+#adventure-info{
+
+  padding:0px 10px 10px 10px;
+
+}
+
+
+
+input[type="text"], input[type="password"], textarea {
+  font-size:18px !important;
+}
+
+input[type="submit"], input[type="button"], input[type="file"] {
+  padding:10px 25px !important;
+ }

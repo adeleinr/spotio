@@ -1,0 +1,56 @@
+Listen 84
+Listen 8084
+
+NameVirtualHost *:84
+NameVirtualHost *:8084
+
+<VirtualHost *:84>
+        WSGIDaemonProcess bfun-production user=webme group=webme threads=10 python-path=/web/bfun/lib/python2.6/site-packages
+        WSGIProcessGroup bfun-production
+        WSGIScriptAlias / /web/bfun/releases/current/bfun/apache/django.wsgi
+        <Directory /web/bfun/releases/current/bfun/apache>
+            Order deny,allow
+            Allow from all
+        </Directory>
+
+
+        Alias /robots.txt /web/bfun/releases/current/bfun/media_rsc/robots.txt
+        Alias /favicon.ico /web/bfun/releases/current/bfun/media_rsc/favicon.ico
+
+        Alias /media_rsc/ /web/bfun/releases/current/bfun/media_rsc/
+        <Directory /web/bfun/releases/current/bfun/media_rsc>
+            Order deny,allow
+            Allow from all
+        </Directory>
+        
+        ErrorLog /var/log/apache2/error.log
+        LogLevel warn
+        CustomLog /var/log/apache2/access.log combine
+
+</VirtualHost>
+
+<VirtualHost *:8084>
+        WSGIDaemonProcess bfun-production-api user=webme group=webme threads=10 python-path=/web/bfun/lib/python2.6/site-packages
+        WSGIProcessGroup bfun-production-api
+        WSGIScriptAlias / /web/bfun/releases/current/bfun/apache/django.wsgi
+        <Directory /web/bfun/releases/current/bfun/apache>
+            Order deny,allow
+            Allow from all
+        </Directory>
+
+
+        Alias /robots.txt /web/bfun/releases/current/bfun/media_rsc/robots.txt
+        Alias /favicon.ico /web/bfun/releases/current/bfun/media_rsc/favicon.ico
+
+        Alias /media_rsc/ /web/bfun/releases/current/bfun/media_rsc/
+        <Directory /web/bfun/releases/current/bfun/media_rsc>
+            Order deny,allow
+            Allow from all
+        </Directory>
+
+        ErrorLog /var/log/apache2/error.log
+        LogLevel warn
+        CustomLog /var/log/apache2/access.log combine
+
+</VirtualHost>
+        

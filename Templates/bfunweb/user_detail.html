@@ -1,0 +1,140 @@
+{% extends "base.html" %}
+
+{% block css %}
+<!-- CSS for autocomplete -->
+<link type="text/css" href="/media_rsc/js/jquery/css/redmond/jquery-ui-1.8.4.custom.css" rel="stylesheet" /> 
+<link rel="stylesheet" href="/media_rsc/css/create_toolbox.css" type="text/css" media="screen,projection" />
+<link rel="stylesheet" href="/media_rsc/css/user_detail_main.css" type="text/css" media="screen,projection" />
+<link rel="stylesheet" href="/media_rsc/css/user_detail_private.css" type="text/css" media="screen,projection" />
+<link rel="stylesheet" href="/media_rsc/css/toolbox.css" type="text/css" media="screen,projection" />
+<!-- CSS for freebase -->
+<link type="text/css" rel="stylesheet" href="http://freebaselibs.com/static/suggest/1.3/suggest.min.css" />
+
+{% endblock %}
+
+{% block title %}{{userProfile.user.username}}'s Profile{% endblock %}
+
+{% block content %}
+<div id="main2" class="span-24 last">
+   {{message}}
+   <div id="userInfoModule" class="span-4 colborder">   	
+			{% if userProfile.picture_url %}
+			    <div id="userPicture editButton">
+			    	  <div class="editButton">
+			    	  	<a href="/colorific/edit_user_picture"><img src="/media_rsc/images/icons_tiny/pencilangled.png"/></a>
+							</div>
+			        <br/>
+							<a href="/colorific/people/{{userProfile.user.username}}"><img width="60%" src="{{ userProfile.picture_url }}"/></a>
+			    </div>
+			{% else %}
+			    <div id="userPicture editButton">
+			    	  <div class="editButton"><a href="/colorific/edit_user_picture"><img src="/media_rsc/images/icons_tiny/pencilangled.png"/></a></div>
+			        <a href="/colorific/people/{{userProfile.user.username}}"><img width="40%" class="blank-avatar" src="/media_rsc/images/avatar.png"/></a>
+			    </div>
+			{% endif %}
+			<div class="title editButton">TAGS
+		    <a href="/colorific/edit_user"><img src="/media_rsc/images/icons_tiny/pencilangled.png"/></a>
+		  </div>
+		  <div id="toolBoxModuleBig" class="tool content">
+		    	{% for tag in userProfile.tags.all %}
+		      <a href="/colorific/people_by_tag/{{tag.slug}}">{{tag.name}}</a>
+		      {% empty %}
+					No tags
+					{% endfor %}
+		  </div>
+		
+			<div class="title editButton">INFO
+			  <a href="/colorific/edit_user"><img src="/media_rsc/images/icons_tiny/pencilangled.png"/></a>
+			</div>
+	      <div id="toolBoxModuleBig" class="content">
+						<a href="">Basic Info</a> <br/>
+            <a href="">Links</a><br/>
+      </div>
+			<div class="title">ABOUT</div>
+			<div id="toolBoxModuleBig" class="content short_content">
+				<div class="short_content">
+				  
+		    </div>
+				<a href="">Read More</a>
+			</div>
+	    <div class="title">SIMILAR PEOPLE</div>
+	    <div id="toolBoxModuleBig" class="content">
+					{% for user in similar_users %}					 
+					  <a href="{{user.get_absolute_public_url}}">
+					  {% if user.picture_thumbnail %}
+						    <img src="{{user.picture_thumbnail}}"/>
+						{% else %}
+						    <img src="/media_rsc/images/avatar_tiny.png"/>
+						{% endif %}
+						</a>  
+					{% empty %}
+					No one is like you
+					{% endfor %}
+	    </div>
+  </div>
+  
+  
+  <div id="userToolboxModule" class="span-19 last">
+    
+    <h2>{{userProfile.user.first_name}} {{userProfile.user.last_name}}</h2>
+
+		       
+  </div>
+	
+</div>
+
+<div id="overlay"></div>
+<!--Begin Hidden Dialog Form -->
+<div id="dialog-form" title="Create New Toolbox">
+	<p class="validateTips">All form fields are required.</p>
+	<ul>
+    <li> 
+      <div>
+        <label for="id_toolbox_name">
+          ToolBox Name. <span class="form-helper"> {{ toolBoxForm.toolbox_name.help_text }}</span>
+        </label>
+      </div>
+      <input type="text" maxlength="100" name="toolbox_name" id="id_toolbox_name" class="text ui-widget-content ui-corner-all">
+    </li>
+    <li>
+      {% if toolBoxForm.toolbox_name.errors %}
+        <span class="error">
+          {{toolBoxForm.toolbox_name.errors|join:", " }}
+        </span>
+      {% endif %}
+    </li>
+    <li>
+      <div>
+        <label for="id_tools">
+          Tools. <span class="form-helper"> {{ toolBoxForm.tools.help_text }}</span>
+        </label>
+      </div>
+      <div id="tools-dropdown">
+        <input type="text" size="35" name="tools" maxlength="300" id="id_tools" class="text ui-widget-content ui-corner-all" > 
+        <input type="hidden" id="id_toolIDs">
+      </div> 
+    </li>
+    <li>
+      {% if toolBoxForm.tools.errors %}
+        <span class="error">
+          {{toolBoxForm.tools.errors|join:", " }}
+        </span>
+      {% endif %}
+    </li>
+  </ul>
+  <input id="user-profile-id" type="hidden" value="{{userProfile.id}}" />
+</div>
+<!--End Hidden Dialog Form -->
+
+{% endblock %}
+
+{% block js %}
+<script src="/media_rsc/js/jquery/js/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.7/jquery-ui.js"></script>
+<!-- Libraries needed for freebase -->
+<!--<script type="text/javascript" src="http://freebaselibs.com/static/suggest/1.3/suggest.min.js"></script>-->
+<script type="text/javascript" src="/media_rsc/js/freebase.js"></script>
+<script src="/media_rsc/js/helper.js"></script>
+<script src="/media_rsc/js/user_detail.js"></script>
+
+{% endblock %}

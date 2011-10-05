@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% block title %}Post an Adventure{% endblock %}
+{% block css %}
+    <link rel="stylesheet" href="/media_rsc/css/create_adventure.css" type="text/css" media="screen,projection" />
+{% endblock %}
+{% block content %}
+
+<div id="create-adventure-content" class="span-14 last prepend-2 append-2">
+  <h1>Post an Adventure</h1>
+  <div id="create-adventure-form">
+    {{message}}
+    {% for picture in adventure_pictures %}
+	      {{ picture.picture.extra_thumbnails_tag.medium }}
+		{% empty %}
+    {% endfor %}
+
+        <form enctype="multipart/form-data" action="/bfunweb/create_adventure/" method="post">
+            {{ formset.management_form }}
+             <div id="imageUploadFields" class="span-13 last">
+                <div id="uploadInput" class="span-10">
+                  <input type="text" id="fileName" size="25" class="file_input_textbox" readonly="readonly"> 
+                </div>
+                <div id="uploadButton" class="span-2 last" style="position: relative;">
+                  <input type="button" style="background: transparent url(/media_rsc/images/icons_big/camera.png);text-decoration: none;border:none;background-repeat: no-repeat;width: 52px;height: 52px;position: relative;"/>
+
+                  <input type="file" name="form-0-picture" id="id_form-0-picture"  class="file_input_hidden" onchange="javascript: document.getElementById('fileName').value = this.value" />
+                  <input type="hidden" name="form-0-id" id="id_form-0-id" />
+                </div>
+             </div>
+             <div id="adventureFormFields" class="span-13 last">
+               <div class="span-13 last">
+                      <input id="id_name" type="text" name="name" maxlength="60" size="17"
+                        {% if adventureForm.name.errors %}
+                        class="error" placeholder= "{{ adventureForm.name.errors|join:', ' }}"h
+				                {% else %}
+                          placeholder="Name: Eg. SF Throlley"
+				                {% endif %}
+                        />
+                      $ <input type="text" name="cost" id="id_cost" maxlength="6" size="10" 
+                        {% if adventureForm.cost.errors %}
+                        class="error" placeholder= "{{ adventureForm.cost.errors|join:', ' }}"
+			                  {% else %}
+                        placeholder="Cost"
+			                  {% endif %}
+                      />
+                </div>
+                <div class="span-13 last">
+                  <input type="text" name="location_formatted_address" id="id_location_formatted_address" size="30" placeholder="City, country, town"/>
+                  <input type="hidden" name="location_lat" id="id_location_lat" />
+                  <input type="hidden" name="location_lon" id="id_location_lon" />                 
+                </div>
+                <div class="span-13 last">
+                   <textarea id="id_tips" maxlength="250" name="tips" placeholder="Add a note"></textarea>                                   
+                </div>
+                <div id="adventureFormButton" class="span-15 last">
+                  <input type="submit" value="Add Sighting" /> 
+                </div>       
+             </div>        
+        </form>
+   </div>
+
+
+
+</div>
+
+
+
+{% endblock %}
+
+{% block js %}
+<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=places&sensor=false"></script>
+<script type="text/javascript" src="/media_rsc/js/create_adventure.js"></script>
+
+{% endblock %}

@@ -1,0 +1,7 @@
+# Site 2 Alias- Bfun
+
+alias open_2='google-chrome http://localhost:80/bfunweb; google-chrome http://localhost:8084/api'
+alias mysite_2='cd /web/bfun/'
+alias restart_site_2='mysite_2; sudo python manage.py runserver_plus 80'
+alias restart_api_2='mysite_2; sudo python manage.py runserver_plus 8084'
+alias restart_search_2='killall java; cd lib/apache-solr-3.1.0/example; java -jar start.jar &'

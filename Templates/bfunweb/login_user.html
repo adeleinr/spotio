@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}Login{% endblock %}
+{% block css %}
+    <link rel="stylesheet" href="/media_rsc/css/login.css" type="text/css" media="screen,projection" />
+{% endblock %}
+{% block content %}
+{{message}}
+
+<div id="content" class="span-24 last">
+	<h1>Sign In</h1>
+	<div id="loginBox" class="span-10">
+		<form method="post" action =".">
+      <div class="span-2" style="margin-top:5px">
+        <label for="id_username">Username:</label>
+      </div>
+			<div class="span-5">
+			  {{ loginForm.username }}
+			</div>
+			<div class="span-6 last">				
+					{% if loginForm.username.errors %}
+					<span class="error">
+					{{ loginForm.username.errors|join:", " }}
+					</span>
+					{% endif %}
+			</div>
+			<div class="span-2" style="margin-top:5px">
+        <label for="id_password">Password:</label>
+      </div>
+      <div class="span-5">
+      	{{ loginForm.password }}
+      </div>
+			<div class="span-6 last">
+				  {% if loginForm.password.errors %}
+				  <span class="error">
+				    {{ loginForm.password.errors|join:", " }}
+				  </span>
+				  {% endif %}
+			</div>
+			<div class="span-10 last" align="left">
+				<input type = "submit" name="submit" value="Submit" />
+			</div>
+		</form>	
+	</div>
+	<div id="adBox" class="span-6 last">
+		{% load facebook_tags %}
+    {% facebook_button %}
+    {% facebook_js %}
+    <a href="#" onclick="javascript:FB.logout(function(response){ document.location = '/bfunweb/logout_user' })">Logout</a>
+</div>
+</div>
+
+{% endblock %}

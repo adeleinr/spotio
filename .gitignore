@@ -1,0 +1,13 @@
+*.pyc
+.project
+settings_local.py
+.production_settings
+.pydevproject
+.tmp*.*
+media_rsc/uploads/images/profiles/*
+media_rsc/uploads/images/avatars/*
+media_rsc/images/icons_big/unused
+private_remote.sh
+media_rsc/css/blueprint-css/
+deploy.log
+redeploy.log

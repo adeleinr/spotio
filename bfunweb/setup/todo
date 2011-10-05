@@ -1,0 +1,20 @@
+TODOs BY PAGE
+
+ideas
+-------
+-Add "I am feeling lucky" locl search
+
+create adventure
+-----------------
+-Change upload picture to use event
+-Add error class to placeholders for errors
+
+MISC TODOs
+-download font instead of pulling it from google
+-add autofocus to all fields
+-find better way to organize the urls
+-find better way to organize the views, models and forms
+-read and fix TextField according to http://docs.djangoproject.com/en/dev/ref/databases/#mysql-collation
+-add blueprint to our repository
+-Peak at how to reimplement registration from socialregistration forms
+-Create piston api documentation https://bitbucket.org/jespern/django-piston/wiki/Documentation#!helpers-utils-decorators

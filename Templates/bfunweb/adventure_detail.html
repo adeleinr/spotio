@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Login{% endblock %}
+{% block css %}
+{% endblock %}
+{% block content %}
+{{message}}
+<div id="content" class="span-24 last">   
+
+{{adventure}}
+
+{% for picture in adventure.pictures.all %}
+    {{ picture.picture.extra_thumbnails_tag.medium }}
+{% empty %}
+   No pictures
+{% endfor %}
+   
+</div>
+
+{% endblock %}
