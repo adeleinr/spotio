@@ -14,4 +14,9 @@ def about(request):
 def splash(request):
   return render_to_response('bfunweb/splash.html',
         context_instance=RequestContext(request))
+
+def test(request):
+  return render_to_response('bfunweb/test.html',
+         context_instance=RequestContext(request))
+         
   

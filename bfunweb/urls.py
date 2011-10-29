@@ -6,7 +6,7 @@ from bfun.bfunweb.models import UserProfile
 urlpatterns = patterns('',
   url(r'^$', main_views.splash),
   url(r'^about/$', main_views.about),
-  
+  url(r'^test/$', main_views.test),
 )
 
 # User profile related pages

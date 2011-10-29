@@ -107,8 +107,8 @@ class Adventure(models.Model):
     pub_date = models.DateTimeField(auto_now_add=True)
     tips = models.TextField(blank=True, max_length=250,)
     location_formatted_address = models.CharField(max_length=60,)
-    location_lat = models.DecimalField(max_digits=30,decimal_places=10,)
-    location_lon = models.DecimalField(max_digits=30,decimal_places=15,)
+    location_lat = models.DecimalField(max_digits=30,decimal_places=10)
+    location_lon = models.DecimalField(max_digits=30,decimal_places=15)
     
     class Meta:
         get_latest_by = 'pub_date'

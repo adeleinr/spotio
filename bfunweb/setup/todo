@@ -18,3 +18,7 @@ MISC TODOs
 -add blueprint to our repository
 -Peak at how to reimplement registration from socialregistration forms
 -Create piston api documentation https://bitbucket.org/jespern/django-piston/wiki/Documentation#!helpers-utils-decorators
+
+FIX
+----
+-When a user tries to login in the normal login using an id he created using the facebook account there is an error. How can I coordinate these 2 accounts?

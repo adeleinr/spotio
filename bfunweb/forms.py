@@ -91,8 +91,8 @@ class AdventureForm (ModelForm):
                          required=False,
                          widget=forms.Textarea())
   location_formatted_address = forms.CharField(max_length=60,)
-  location_lat = forms.DecimalField(max_digits=100,)
-  location_lon = forms.DecimalField(max_digits=100,)
+  location_lat = forms.DecimalField(max_digits=100)
+  location_lon = forms.DecimalField(max_digits=100)
     
   class Meta:
     model = Adventure 

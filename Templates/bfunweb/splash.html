@@ -15,9 +15,10 @@
 
 <body>
   <div id="top-banner-splash">
-      <div id="left-menu-splash" span="class-19">          
+      <div id="left-menu-splash" class="span-11">    
+        <span id="logo">spot.io</span>      
       </div>
-      <div id="right-menu-splash" span="class-3 last">
+      <div id="right-menu-splash" class="span-12 last">
           <ul class="clearfix">
             	<li><a href="/bfunweb/adventures/">Explore</a></li>
             	<li><a href="/bfunweb/create_adventure/">Post Adventure</a></li>
@@ -45,15 +46,17 @@
       <div id="left-content" class="span-14">
         <p>Discover places you can afford. Have fun on a <span id="blue-emphasis">budget</span>. Share your weekend adventure's cost. How much did others spend? From an icecream treat to a weekend in Africa.</p>
 
-         <div class="ui-widget span-12 last">
+         <div class="ui-widget span-13 last">
             <form id="search-form" method="post" action="/bfunweb/search/">
                 <div id="question" class="span-11 last">How much do you want to spend?</div>
-                <div id="search-box" class="span-11 last">
+                <div id="search-box" class="span-9">
                   $<input type="text" name="q" id="id_search_term" maxlength="10" size="5" placeholder="100.00"/>
-                  <input type="text" name="f" id="id_search_city" maxlength="30" size="12" placeholder="San Jose, CA"/>
+                  <input type="text" name="f" id="id_search_city" maxlength="30" size="13" placeholder="San Jose, CA"/>
                   <input type="hidden" name="toolbox_id" id="id_toolbox_id" >
-                  <input type="submit" value="Search"/>
 					      </div>
+					      <div id="adventures-search-button" class="span-1 last">
+                    <input type="submit" value="Search"/> 
+                 </div>
             </form>
          </div>
         

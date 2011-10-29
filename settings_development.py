@@ -8,7 +8,6 @@ HOST_IP = 'localhost'
 
 PORT = '80'
 
-
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 

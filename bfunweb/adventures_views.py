@@ -28,7 +28,7 @@ def adventure_index(request):
   return render_to_response('bfunweb/adventures_index.html',{'adventures': adventures},
                             context_instance=RequestContext(request))
                             
-@login_required(redirect_field_name='bfunweb/login_user')
+@login_required(redirect_field_name='next_page')
 def create_adventure(request):
 
   message = ''

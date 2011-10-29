@@ -112,6 +112,25 @@ goog.events.listen(menu, 'action', function(e) {
   }  
 });  
 
+goog.events.listen(categoryMenu, goog.ui.Component.EventType.ACTION,
+  function(e) {
+    var select = e.target;
+    var value = select.getValue();
+    alert(value);
+    //goog.dom.setTextContent(goog.dom.getElement('category-menu'), value);
+    
+});
+
+goog.events.listen(priceMenu, goog.ui.Component.EventType.ACTION,
+  function(e) {
+    var select = e.target;
+    var value = select.getValue();
+    alert(value);
+    //goog.dom.setTextContent(goog.dom.getElement('price-menu'), value);
+    
+});
+
+
 
 
 

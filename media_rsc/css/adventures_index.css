@@ -16,30 +16,36 @@
   cursor:pointer;
 }
 
-#adventures ul{
-  list-style: none !important;
-  padding: 0;
-  width:860px;
-}
+.columns{
 
-#adventures li{ 
-  float: left;
-  width: 23em;
-  padding-top:10px;
-  padding-bottom:10px;
-}
+	/*-moz-column-count: 3;
+	-webkit-column-count: 3;*/
+
+	/* When I specify column-width: 150px,
+	 unsurprisingly all columns become 150 pixels wide.
+	 Thereafter the browser calculates how many columns
+	 of this width can fit into the parent box,
+	 and creates these columns.
+  */
+
+	-moz-column-gap: 5px;
+	-webkit-column-gap: 5px;
+	column-width: 150px;
+
+	}
 
 .adventure{
   background: #FFFFFF;
   -moz-border-radius: 5px 5px 5px 5px;
 	-webkit-border-radius: 5px 5px 5px 5px;
-	-webkit-box-shadow:#555555 0 1px 8px -1px;
+	-webkit-box-shadow:#555555 0 2px 8px -1px;
 	-moz-box-shadow:#555555 0 2px 8px -1px;
-	padding: 0px 0px 20px 0px;
+	padding: 10px 0px 10px 5px;
+	margin:5px 3px 5px 3px;
 	width: 290px;
 	height: 120px;
 	font-size:18px !important;
-  
+ 
 
 }
 
@@ -48,15 +54,15 @@
   color:  #0755A5;
 }
 
-#adventure-picture{
+.adventure-picture{
   padding-left:0px;
   padding-top:0px;
   background:#ffffff;
   -moz-border-radius: 5px 5px 0px 0px;
 	-webkit-border-radius: 5px 5px 0px 0px;
-	height: 110px;
+	/*height: 110px;*/
 }
-#adventure-picture img{
+.adventure-picture img{
   margin:10px;
   border:1px black solid;
 }
@@ -64,6 +70,17 @@
 #adventure-info{
 
   padding:0px 10px 10px 10px;
+
+}
+
+.adventure-location{
+    color:#666666;
+    font-size:14px;
+}
+
+.unimportant{
+    color:#666666;
+    font-size:14px;
 
 }
 
@@ -75,4 +92,27 @@ input[type="text"], input[type="password"], textarea {
 
 input[type="submit"], input[type="button"], input[type="file"] {
   padding:10px 25px !important;
- }
+}
+
+.search-filter{
+  float:left;
+  font-size:14px !important;
+  padding-left:20px!important;
+}
+
+#filters-menu{
+  padding-top:10px;
+}
+
+
+.goog-flat-menu-button{
+  background-color:#FAFAFB !important;
+  border:none !important;
+
+}
+
+.hidden {
+  visibility: visible;
+  display: none;
+}
+

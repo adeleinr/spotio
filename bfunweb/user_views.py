@@ -90,8 +90,13 @@ def login_user(request):
       if user is not None:
         if user.is_active:
           login(request, user)
+          #next = request.GET['next_page']
+          next = ''
+          print str(request.GET)
+
           # Redirect to a success page
-          return HttpResponseRedirect('/bfunweb/user_detail/' + username)
+          return HttpResponseRedirect(next)
+
         else:
           message = 'Your account is disabled'
           

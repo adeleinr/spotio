@@ -6,6 +6,10 @@ from django.db import IntegrityError
 from django.utils import simplejson
 
 from bfunweb.models import Adventure, Image
+from bfunweb.forms import AdventureForm, ImageForm
+from django.forms.models import modelformset_factory, inlineformset_factory
+from django.utils.functional import curry
+from decimal import *
 
 # Used for Search Only
 import haystack
@@ -280,6 +284,9 @@ class ToolboxesHandler(BaseHandler):
 # List the adventures     => http://localhost:8084/api/adventures
 # Get a adventures        => http://localhost:8084/api/adventures/15
 # Get a user's adventures => http://localhost:8084/api/adventures/adeleinr
+# Create an adventure     => 
+# curl -F "form-0-picture=@/home/adeleinr/Desktop/sandiego_zoo.jpg" -F "name=San Diego Safari" -F "cost=200" -F "userprofile_id=1" -F "tips=" -F "location_formatted_address=San Diego" -F "location_lat=3" -F "location_lon=4"  http://localhost:8084/api/adventures/
+#
 class AdventuresHandler(BaseHandler):
   allowed_methods = ('GET', 'POST', 'PUT', 'DELETE')
   model = Adventure
@@ -304,52 +311,85 @@ class AdventuresHandler(BaseHandler):
 
   def create(self, request):
     # This option is for when the input comes
-    # structured like in JSON format for example
-    '''
+    # structured like in JSON format for example    
     if request.content_type:
+
+      print request
+
+      adventureForm = AdventureForm()
       
-    else:
+      adventure = Adventure()
+
+      ImageFormSet = modelformset_factory(Image, form=ImageForm, extra=1)
+
+      ImageFormSet.form = staticmethod(curry(ImageForm, adventure))
+            
+      formset = ImageFormSet(queryset=Image.objects.none())
+
+      adventure_pictures = ''
+      
       userProfile = get_object_or_404(UserProfile, pk=request.POST['userprofile_id'])
 
-      toolBox = ToolBox.objects.create(toolbox_name = request.POST['toolbox_name'],
-                                               popularity = 0,
-                                               user = userProfile)
-      tools = simplejson.loads(request.POST['tools'])
-      
-      
-      # Tools list look like this:
-      # [(u'1', [u'Aptana IDE', u'/en/aptana_ide']),
-      # (u'0', [u'Eclipse', u'/en/eclipse'])]
-      for _, value in tools.items():
-        tool_name = value[0]
-        tool_semantic_id = value[1]
+      #tools = simplejson.loads(request.POST['tools'])
+
+      if request.method == "POST":
+        adventureForm = AdventureForm(request.POST)
+
+        print adventureForm
         
-        if not tool_name.isspace() and len(tool_name) > 0:
+        if adventureForm.is_valid():
+          cost = 0.0
           try:
-            newTool = Tool.objects.get(tool_name=tool_name, tool_semantic_id=tool_semantic_id)
-          except: 
-            try:
-              if tool_name.isspace() or len(tool_name) <= 0:
-                tool_semantic_id = 'noid'
-              newTool = Tool.objects.create(tool_name=tool_name,tool_semantic_id = tool_semantic_id )
-            except Exception, e:
-              print e
-              return rc.DUPLICATE_ENTRY
-                   
-            # For now we are just recording that
-            # this tool has been used by someone every time
-            # TODO: need to remove the active field
-            newTool.active = True
-            newTool.save()
- 
-          # toolBox.tools.add(newTool) -> Does not work
-          # because we are specifying the 'through' table 
-          # Instead we need to create every relation entry
-          toolBoxToolRelation = ToolBoxToolRelation.objects.create(toolbox = toolBox,
-                                                                  tool= newTool) 
-         
+            adventureForm.user = userProfile
+            if request.POST.get('cost'):
+              cost = Decimal(request.POST['cost'])
+
+              location_formatted_address = request.POST.get('location_formatted_address')
+              location_lat = request.POST.get('location_lat')
+              location_lon = request.POST.get('location_lon')
+                         
+              adventure = Adventure.objects.create(name = request.POST['name'],
+                                                   cost =  cost,
+                                                   user = userProfile,
+                                                   tips = request.POST['tips'],
+                                                   location_formatted_address = location_formatted_address,
+                                                   location_lat = location_lat,
+                                                   location_lon = location_lon)
+
+              ImageFormSet.form = staticmethod(curry(ImageForm, adventure))
+              request.POST['form-TOTAL_FORMS']=1
+              request.POST['form-INITIAL_FORMS']=0
+              
+              formset = ImageFormSet(request.POST, request.FILES, queryset=Image.objects.none())
+              
+              if formset.is_valid():
+                instances = formset.save(commit=False)
+                for image in instances:
+                  try:
+                    image.adventure = adventure
+                    image.save()
+                    
+                  except Image.DoesNotExist:
+                    message = 'Image does not exit'
+                    return rc.BAD_REQUEST
+
+              else:
+                message = "Form is not valid"
+                return rc.BAD_REQUEST
+
+          except Exception, e:    
+            message = e
+            return rc.BAD_REQUEST
+               
       return rc.CREATED
-      '''
+          
+         
+    else:
+
+      return rc.NOT_IMPLEMENTED
+      
+      
+      
 
 
   @classmethod
