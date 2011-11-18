@@ -71,11 +71,13 @@ AUTHENTICATION_BACKENDS = (
 )
 
 MIDDLEWARE_CLASSES = (
+    'django.middleware.cache.UpdateCacheMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
     'socialregistration.middleware.FacebookMiddleware',
+    'django.middleware.cache.FetchFromCacheMiddleware',
 
 )
 
@@ -101,6 +103,8 @@ INSTALLED_APPS = (
     'taggit',
     'sorl.thumbnail',
     'haystack',
+    'django_memcached',
+    'django.contrib.markup',
 )
 
 
@@ -117,7 +121,8 @@ HAYSTACK_SITECONF = 'bfun.search_sites'
 HAYSTACK_SEARCH_ENGINE = 'solr'
 HAYSTACK_SOLR_URL = 'http://'+HOST_IP+':8983/solr'
 
-
+CACHE_BACKEND = 'memcached://127.0.0.1:11211/'
+#DJANGO_MEMCACHED_REQUIRE_STAFF = True
 
 
 

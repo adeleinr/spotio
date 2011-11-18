@@ -1,9 +1,11 @@
 from django.conf.urls.defaults import *
 from piston.resource import Resource
 from piston.authentication import HttpBasicAuthentication
+from django_piston_authentication import DjangoAuthentication
+from piston.doc import documentation_view
+
 from api.handlers import UserProfileHandler, AnonymousUserProfileHandler, SearchSuggestionsHandler, SearchHandler, AdventuresHandler, ImagesHandler
 
-from django_piston_authentication import DjangoAuthentication
 
 #auth = HttpBasicAuthentication(realm='My sample API')
 
@@ -35,4 +37,5 @@ urlpatterns = patterns('',
    #url(r'^tool_suggestions/$', tools_suggestions_resource, { 'emitter_format': 'json' }),
    url(r'^search_suggestions/$', search_suggestions_resource, { 'emitter_format': 'ext-json' }),
    url(r'^search/$', search_resource, { 'emitter_format': 'ext-json' }),
+   url(r'^doc$', documentation_view),
 )

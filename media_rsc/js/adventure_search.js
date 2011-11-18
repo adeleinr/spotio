@@ -112,11 +112,16 @@ goog.events.listen(menu, 'action', function(e) {
   }  
 });  
 
+// Filters in adventure index and search pages
 goog.events.listen(categoryMenu, goog.ui.Component.EventType.ACTION,
   function(e) {
     var select = e.target;
     var value = select.getValue();
+    var tag = document.getElementById("tag");
     alert(value);
+    tag.value = value;
+    alert(tag.value);
+    document.forms['adventures-search-form'].submit();
     //goog.dom.setTextContent(goog.dom.getElement('category-menu'), value);
     
 });

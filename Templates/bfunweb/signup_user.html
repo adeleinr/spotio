@@ -6,12 +6,15 @@
 {% block content %}
 <div id="content" class="span-24 last">
     <div id="registrationLeftForm" class="span-8 colborder">
-      <h1><span id="blue-emphasis"> Life is Beautiful</span></h1>	      
-		  <p>Why not enjoy it? <br/>And afford it.</p>
-		  <div id="registration-pic"><img src="/media_rsc/images/globe.png"/></div>
+      <h1><span id="blue-emphasis"></span></h1>	      
+		  <div id="facebook">
+            {% load facebook_tags %}
+            {% facebook_button %}
+            {% facebook_js %}
+          </div>
 	  </div>
 
-    <h1>Sign up</h1>    
+    <h1><span id="blue-emphasis"> Sign Up</span></h1>     
     <div id="registrationRightForm" class="span-14">
       
       {{message}}
@@ -160,11 +163,6 @@
               <input type = "submit" name="submit" value="Submit" />
           </div>				
       </form>
-      <div id="facebook">
-        {% load facebook_tags %}
-        {% facebook_button %}
-        {% facebook_js %}
-      </div>
      </div>
   </div>
 </div>

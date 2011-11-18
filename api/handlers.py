@@ -1,5 +1,6 @@
 from piston.handler import BaseHandler, AnonymousBaseHandler
 from piston.utils import rc
+from piston.doc import generate_doc
 from bfunweb.models import UserProfile
 from django.shortcuts import get_object_or_404
 from django.db import IntegrityError
@@ -11,23 +12,39 @@ from django.forms.models import modelformset_factory, inlineformset_factory
 from django.utils.functional import curry
 from decimal import *
 
+#Used for Mem Caching
+from django.core.cache import cache
+
 # Used for Search Only
 import haystack
 from haystack.indexes import *
 from haystack.query import SearchQuerySet
 
-# List the users               =>
-#      http://localhost:8084/api/people
-# Get a user                   =>
-#      http://localhost:8084/api/people/1
-# Get all users but this one   =>
-#      http://localhost:8084/api/people/?exclude=1
-# Get users, limit             =>
-#      http://localhost:8084/api/people/?limit=3
-# Get users, exclude and limit =>
-#      http://localhost:8084/api/people/?exclude=1&limit=3
-# Get users, tag and limit     =>
-#      http://localhost:8084/api/people/?tag=web-dev&limit=3
+# List the users:
+#-------------------------------------------               
+# http://localhost:8084/api/people
+#-------------------------------------------
+# Get a user:
+#-------------------------------------------
+# http://localhost:8084/api/people/1
+#-------------------------------------------
+# Get all users but this one:
+#-------------------------------------------
+# http://localhost:8084/api/people/?exclude=1
+#-------------------------------------------
+# Get users, limit by n:
+#-------------------------------------------
+# http://localhost:8084/api/people/?limit=3
+#-------------------------------------------
+# Get users, exclude by user id and limit by n
+#-------------------------------------------
+# http://localhost:8084/api/people/?exclude=1&limit=3
+#-------------------------------------------
+# Get users, tag and limit:
+#-------------------------------------------
+# http://localhost:8084/api/people/?tag=web-dev&limit=3
+#-------------------------------------------
+
 class UserProfileHandler(BaseHandler):
   allowed_methods = ('GET', 'POST', 'PUT', 'DELETE')
   model = UserProfile
@@ -38,6 +55,15 @@ class UserProfileHandler(BaseHandler):
   
   
   def read(self, request, userprofile_id = None):
+    """Summary of class here.
+
+    Longer class information....
+    Longer class information....
+
+    Attributes:
+      likes_spam: A boolean indicating if we like SPAM or not.
+      eggs: An integer count of the eggs we have laid.
+    """
     
     if userprofile_id:       
         try:
@@ -78,10 +104,14 @@ class UserProfileHandler(BaseHandler):
     return myinstance.tags.all()
 
 
-# List the users  =>
-#                 http://localhost:8000/api/people
-# Get a user      =>
-#                 http://localhost:8000/api/people/1
+# List the users:
+#-------------------------------------------
+# http://localhost:8000/api/people
+#-------------------------------------------
+# Get a user
+#-------------------------------------------
+# http://localhost:8000/api/people/1
+
 class AnonymousUserProfileHandler(UserProfileHandler, AnonymousBaseHandler):
   #fields = ('toolbox', 'id', ('user', ('username', 'first_name')),'home_zipcode', 'gender', 'occupation', 'self_description', 'twitter', 'absolute_url')
   fields = ('id', ('user', ('username', 'first_name')),
@@ -89,11 +119,15 @@ class AnonymousUserProfileHandler(UserProfileHandler, AnonymousBaseHandler):
             'tags', ('pictures',()), 'picture_url', 'picture_thumbnail')   
 
   
-# Get a search suggestion for 
-# a tool or toolbox                   => 
-#                   http://localhost:8084/api/search_suggestions/?term=eclipse
-# Get a partial suggestion for a tool =>
-#                   http://localhost:8084/api/search_suggestions/?term=eclip
+# Get a search suggestion for an adventure:
+#------------------------------------------- 
+# http://localhost:8084/api/search_suggestions/?term=biking
+#-------------------------------------------
+# Get a partial suggestion for an adventure
+#-------------------------------------------
+# http://localhost:8084/api/search_suggestions/?term=bik
+# TODO Put to use
+
 class SearchSuggestionsHandler(BaseHandler):
   allowed_methods = ('GET')
     
@@ -125,10 +159,16 @@ class SearchSuggestionsHandler(BaseHandler):
     return result_list
 
   
-# Search for adventures => 
-#                       http://localhost:8084/api/search/?term=carmel
-#                       http://localhost:8084/api/search/?cost=100
-#                       http://localhost:8084/api/search/term=sf&cost=100&currency_type=USD&location_formatted_address='San Francisco, CA, USA'
+# Search for adventures:
+#------------------------------------------- 
+# http://localhost:8084/api/search/?term=carmel
+# http://localhost:8084/api/search/?cost=100
+# http://localhost:8084/api/search/term=sf&cost=100&
+#                                  currency_type=USD&
+#                                  location_formatted_address=San Francisco, CA, USA&
+#                                  tag=Weekend Adventure
+# If no parameter is passed in or parameter is
+# only the tag then the result is empty
 class SearchHandler(BaseHandler):
   allowed_methods = ('GET')
   
@@ -144,31 +184,76 @@ class SearchHandler(BaseHandler):
     location_formatted_address = request.GET.get('location_formatted_address')
     location_lat = request.GET.get('location_lat')
     location_lon = request.GET.get('location_lon')
+    tag = request.GET.get('tag')
+
+    cache_key=''
     
     sqs = SearchQuerySet().models(Adventure);
     
     if term:
       sqs = sqs.filter(text=term)
+      # Remove all space from the key, memcache cant hangle those
+      cache_key='-'.join(term.split())
       
     if cost:     
-      sqs = sqs.filter(cost=cost)     
+      sqs = sqs.filter(cost=cost)  
+      cache_key+=str(cost)   
       
     if location_formatted_address:
       sqs = sqs.filter(location_formatted_address=location_formatted_address)
+      # Remove all space from the key, memcache cant hangle those
+      cache_key+='-'.join(location_formatted_address.split())
 
     if location_lat:
       sqs = sqs.filter(location_lat)
 
     if location_lon:
       sqs = sqs.filter(location_lon)
-      
  
     item_dict = {}
 
-    for item in sqs:  
-       if (isinstance(item.object, Adventure)):
-         result_list.append(get_object_or_404(Adventure, pk=item.object.id))
+    # If the user entered any of the params in the search box
+    # then we search by those
+    if any ([term,cost,location_formatted_address]) :
 
+      cached_result_list = cache.get(cache_key)
+
+      if cached_result_list is None:
+        # If the search yielded anything
+        if sqs.count() != 0:
+          for item in sqs:  
+           if (isinstance(item.object, Adventure)):
+             result_list.append(get_object_or_404(Adventure, pk=item.object.id))
+          cache.set(cache_key, result_list, 30)
+          print "Cache miss key: "+cache_key
+
+      else:
+        print "Cache hit key: "+cache_key
+        print cached_result_list
+        result_list = cached_result_list
+
+      if tag:
+        print "Going to filter by tag: "+tag
+        filtered_result_list = []
+        while len(result_list) > 0:
+          thisItem = result_list.pop()
+          # Right now we are only using one tag per
+          # adventure, so we grab the only element
+          if len(thisItem.tags.all()) > 0 and thisItem.tags.all()[0] != tag:
+            filtered_result_list.append(thisItem)
+
+        result_list = filtered_result_list
+
+    # Else if the user did not enter any parameter but selected
+    # to search by tag then we get the whole list and filter
+    # by tag
+    elif tag:
+      print tag
+      result_list = Adventure.objects.filter(tags__name__in=[tag]).order_by('-pub_date')
+      
+   
+
+    
     return result_list
 
 '''
@@ -281,16 +366,28 @@ class ToolboxesHandler(BaseHandler):
 '''
 
 
-# List the adventures     => http://localhost:8084/api/adventures
-# Get a adventures        => http://localhost:8084/api/adventures/15
-# Get a user's adventures => http://localhost:8084/api/adventures/adeleinr
-# Create an adventure     => 
+# List the adventures:
+#----------------------------------------------
+# http://localhost:8084/api/adventures
+#----------------------------------------------
+# Get a adventures:
+#----------------------------------------------
+# http://localhost:8084/api/adventures/15
+#----------------------------------------------
+# Get a user's adventures:
+#----------------------------------------------
+# http://localhost:8084/api/adventures/adeleinr
+#----------------------------------------------
+# Create an adventure
+#----------------------------------------------
 # curl -F "form-0-picture=@/home/adeleinr/Desktop/sandiego_zoo.jpg" -F "name=San Diego Safari" -F "cost=200" -F "userprofile_id=1" -F "tips=" -F "location_formatted_address=San Diego" -F "location_lat=3" -F "location_lon=4"  http://localhost:8084/api/adventures/
-#
+
 class AdventuresHandler(BaseHandler):
   allowed_methods = ('GET', 'POST', 'PUT', 'DELETE')
   model = Adventure
-  fields = ('id', 'name', 'cost', 'picture','big_picture','currency_type','tips','pub_date', 'location_formatted_address','location_lat','location_lon','absolute_url', ('user', ()),)
+  fields = ('id', 'name', 'cost', 'picture','big_picture','currency_type','tips',
+  'pub_date', 'location_formatted_address','location_lat','location_lon','absolute_url',
+  ('user', ()),'tags',)
   
   def read(self, request, adventure_id = None, username = None):     
     if adventure_id:       
@@ -388,9 +485,6 @@ class AdventuresHandler(BaseHandler):
 
       return rc.NOT_IMPLEMENTED
       
-      
-      
-
 
   @classmethod
   def picture(cls, myinstance):
@@ -401,13 +495,26 @@ class AdventuresHandler(BaseHandler):
     return myinstance.pictures.all()[0].picture.extra_thumbnails['large']
 
   @classmethod
+  def tags(cls, myinstance):
+    return myinstance.tags.all()
+
+  @classmethod
   def absolute_url(cls, myinstance):
     return myinstance.get_absolute_url()
 
 
-# List the adventures     => http://localhost:8084/api/images
-# Get a adventures        => http://localhost:8084/api/images/15
-# Get a user's adventures => http://localhost:8084/api/images/adeleinr
+# List the adventures:
+#-------------------------------------------
+# http://localhost:8084/api/images
+#-------------------------------------------
+# Get a adventures:
+#-------------------------------------------
+# http://localhost:8084/api/images/15
+#-------------------------------------------
+# Get a user's adventures:
+#-------------------------------------------
+# http://localhost:8084/api/images/adeleinr
+
 class ImagesHandler(BaseHandler):
   '''
   allowed_methods = ('GET', 'POST', 'PUT', 'DELETE')

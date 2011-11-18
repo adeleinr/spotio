@@ -93,16 +93,6 @@ body {
   color:#939393;
 }
 
-h2{
-
-  font-size:28px !important;
-  font-weight: 5px;
-  line-height:32px;
-  color:#939393;
-  font:normal normal normal 13px/normal 'Open Sans', sans-serif;
-
-}
-
 
 /* Used for menus on the header */
 h1{
@@ -115,6 +105,19 @@ h1{
   background-color:#FAFAFB;
   border-bottom-color:1px solid #F2F3F4;
   padding-left: 20px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+
+}
+
+
+h2{
+
+  font-size:28px !important;
+  font-weight: 5px;
+  line-height:32px;
+  color:#939393;
+  font:normal normal normal 13px/normal 'Open Sans', sans-serif;
 
 }
 
@@ -128,6 +131,14 @@ h1{
   background-color:#FAFAFB;
   border-bottom-color:1px solid #F2F3F4;
   padding:2px 0px 0px 0px;
+
+}
+
+#content-header a{
+
+  font-size:14px;
+  padding-left: 20px;
+  padding-bottom: 5px;
 
 }
 

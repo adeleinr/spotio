@@ -16,6 +16,7 @@ urlpatterns = patterns('',
     (r'^media_rsc/(?P<path>.*)$', 'django.views.static.serve', {'document_root': 'media_rsc'}),
     (r'^socialregistration/',include('socialregistration.urls')),
     url(r'^search/', include('haystack.urls'),name='haystack_search'),
+    url(r'^cache/', include('django_memcached.urls')),
     
 	
 )

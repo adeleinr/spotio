@@ -109,6 +109,9 @@ class Adventure(models.Model):
     location_formatted_address = models.CharField(max_length=60,)
     location_lat = models.DecimalField(max_digits=30,decimal_places=10)
     location_lon = models.DecimalField(max_digits=30,decimal_places=15)
+
+    tags = TaggableManager()
+
     
     class Meta:
         get_latest_by = 'pub_date'
